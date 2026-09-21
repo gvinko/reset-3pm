@@ -206,15 +206,98 @@ function loadState() {
 }
 
 let STATE = loadState();
+let syncTimer = null;
+let syncReady = false;
+let syncBusy = false;
+
+function normalizeState(parsed) {
+  const base = defaultState();
+  const tasks = Array.isArray(parsed && parsed.tasks) ? parsed.tasks : [];
+  migrateTaskOrder(tasks);
+  return {
+    tasks,
+    brainDump: Array.isArray(parsed && parsed.brainDump) ? parsed.brainDump : [],
+    settings: Object.assign({}, base.settings, (parsed && parsed.settings) || {})
+  };
+}
+
+async function pushCloudState() {
+  if (!syncReady || syncBusy || !navigator.onLine) return;
+  syncBusy = true;
+  try {
+    const res = await fetch("/api/state", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(STATE)
+    });
+    if (!res.ok) throw new Error("sync " + res.status);
+  } catch (e) {
+    console.warn("RESET cloud sync delayed.", e);
+  } finally {
+    syncBusy = false;
+  }
+}
+
+function queueCloudSave() {
+  if (!syncReady) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushCloudState, 350);
+}
 
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+    queueCloudSave();
   } catch (e) {
     console.error("RESET: failed to save state.", e);
     toast("Couldn't save — storage may be full.", "error");
   }
 }
+
+async function initialiseCloudSync() {
+  try {
+    const localRaw = localStorage.getItem(STORAGE_KEY);
+    const local = localRaw ? normalizeState(JSON.parse(localRaw)) : defaultState();
+    const res = await fetch("/api/state", { cache: "no-store" });
+    if (!res.ok) throw new Error("sync " + res.status);
+    const payload = await res.json();
+
+    if (payload && payload.state) {
+      STATE = normalizeState(payload.state);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+      render();
+    } else if (localRaw) {
+      STATE = local;
+      syncReady = true;
+      await pushCloudState();
+      return;
+    }
+    syncReady = true;
+  } catch (e) {
+    console.warn("RESET is using local storage until cloud sync is available.", e);
+    syncReady = true;
+  }
+}
+
+async function refreshCloudState() {
+  if (!syncReady || syncBusy || !navigator.onLine) return;
+  try {
+    const res = await fetch("/api/state", { cache: "no-store" });
+    if (!res.ok) return;
+    const payload = await res.json();
+    if (!payload || !payload.state) return;
+    const incoming = normalizeState(payload.state);
+    if (JSON.stringify(incoming) !== JSON.stringify(STATE)) {
+      STATE = incoming;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+      render();
+    }
+  } catch (e) { /* local fallback stays active */ }
+}
+
+window.addEventListener("online", () => { pushCloudState(); });
+window.addEventListener("focus", refreshCloudState);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshCloudState(); });
 
 /* =========================================================================
    TOASTS

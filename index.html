@@ -866,6 +866,18 @@ function renderTaskList() {
   return list.map(renderTaskCard).join("");
 }
 
+function deadlineInfo(t) {
+  if (!t.dueAt || t.status === "done") return null;
+  const due = new Date(t.dueAt); if (Number.isNaN(due.getTime())) return null;
+  const diff = due - new Date(), day = 86400000;
+  let label, level;
+  if (diff < 0) { label="OVERDUE"; level="overdue"; }
+  else if (diff <= day) { label="DUE TODAY"; level="today"; }
+  else if (diff <= 3*day) { label="DUE " + due.toLocaleDateString("en-AU",{weekday:"short"}).toUpperCase(); level="soon"; }
+  else { label="Due " + due.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"}); level="normal"; }
+  return {label,level,title:due.toLocaleString("en-AU",{weekday:"long",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})};
+}
+
 function renderTaskCard(t) {
   const band = priorityBand(t.priority);
   const isDone = t.status === "done";
@@ -887,7 +899,7 @@ function renderTaskCard(t) {
               <span class="font-semibold text-[15px] leading-snug ${isDone ? "line-through text-[var(--text-faint)]" : ""}">${escapeHtml(t.title)}</span>
               <span class="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded" style="background:${band.soft};color:${band.color}">${t.kind === "quote" ? "Quote" : "Task"}</span>
             </div>
-            ${t.notes ? `<p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">${escapeHtml(t.notes)}</p>` : ""}
+            ${t.notes ? `<p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">${escapeHtml(t.notes)}</p>` : ""}\n            ${deadline ? `<span title="${escapeHtml(deadline.title)}" class="inline-flex items-center gap-1 mt-1.5 text-[11px] font-bold px-2 py-1 rounded-full ${deadline.level === "overdue" ? "bg-red-100 text-red-700" : deadline.level === "today" ? "bg-orange-100 text-orange-700" : deadline.level === "soon" ? "bg-amber-100 text-amber-700" : "bg-[var(--surface-2)] text-[var(--text-muted)]"}"><i data-lucide="clock-3" class="w-3 h-3"></i>${deadline.label}</span>` : ""}
             ${isWaiting ? `<span class="inline-flex items-center gap-1 mt-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--surface-3);color:var(--text-muted)"><i data-lucide="hourglass" class="w-3 h-3"></i>${escapeHtml(t.waitingNote || "Waiting on response")}</span>` : ""}
             ${(t.contact || t.phone || t.address) ? `
               <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-[var(--text-muted)]">
@@ -965,7 +977,7 @@ function openTaskModal(id) {
         <input id="tm-contact" type="text" placeholder="Contact name" value="${escapeHtml(t ? t.contact : "")}" class="bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
         <input id="tm-phone" type="tel" placeholder="Phone" value="${escapeHtml(t ? t.phone : "")}" class="bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
       </div>
-      <input id="tm-address" type="text" placeholder="Site location / address" value="${escapeHtml(t ? t.address : "")}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
+      <input id="tm-address" type="text" placeholder="Site location / address" value="${escapeHtml(t ? t.address : "")}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />\n      <div><label class="block text-sm font-medium text-[var(--text-muted)] mb-1.5">Deadline <span class="text-[var(--text-faint)] font-normal">(optional)</span></label><input id="tm-due" type="datetime-local" value="${t && t.dueAt ? escapeHtml(t.dueAt.slice(0,16)) : ""}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)]" /><p class="text-[11px] text-[var(--text-faint)] mt-1">Visual prompt only — no extra notification.</p></div>
       <div>
         <div class="flex items-center justify-between mb-1.5">
           <label class="text-sm font-medium text-[var(--text-muted)]">Priority</label>

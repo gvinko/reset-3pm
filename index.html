@@ -34,7 +34,7 @@
       "<circle cx='50' cy='50' r='34' fill='none' stroke='#E8A33D' stroke-width='7'/>" +
       "<path d='M50 30 L50 52 L66 62' fill='none' stroke='#E8A33D' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/>" +
       "</svg>";
-    return "data:image/svg+xml;base64," + btoa(svg);
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   };
   var icon = buildIcon();
   var manifest = {
@@ -55,7 +55,7 @@
   };
   var link = document.createElement("link");
   link.rel = "manifest";
-  link.href = "data:application/manifest+json;base64," + btoa(JSON.stringify(manifest));
+  link.href = "data:application/manifest+json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifest));
   document.head.appendChild(link);
 
   var appleTouch = document.createElement("link");
@@ -923,6 +923,7 @@ function renderTaskCard(t) {
   const band = priorityBand(t.priority);
   const isDone = t.status === "done";
   const isWaiting = t.status === "waiting";
+  const deadline = deadlineInfo(t);
   return `
   <div class="task-card rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden ${isWaiting ? "opacity-60" : ""}" data-id="${t.id}">
     <div class="flex">

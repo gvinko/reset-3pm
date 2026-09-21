@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>RESET — 3:00 Daily Review</title>
+<meta name="description" content="Daily 3:00 PM task review, quote follow-up manager, and PDF export tool." />
+<meta name="theme-color" content="#1C1B1A" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="RESET" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<script>
+// ---------------------------------------------------------------------------
+// Inline Web App Manifest (built at runtime, injected as a data: URI so the
+// entire app can ship as one file). Icons are inline SVGs.
+// ---------------------------------------------------------------------------
+(function () {
+  var iconSvg = function (size) {
+    return "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>" +
+      "<rect width='100' height='100' rx='18' fill='%231C1B1A'/>" +
+      "<circle cx='50' cy='50' r='34' fill='none' stroke='%23E8A33D' stroke-width='7'/>" +
+      "<path d='M50 30 L50 52 L66 62' fill='none' stroke='%23E8A33D' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/>" +
+      "</svg>";
+  };
+  var toDataUri = function (svg) {
+    return "data:image/svg+xml," + encodeURIComponent(svg).replace(/%25231C1B1A/g, "%231C1B1A");
+  };
+  // Simpler: build without double-encoding issue.
+  var buildIcon = function () {
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>" +
+      "<rect width='100' height='100' rx='18' fill='#1C1B1A'/>" +
+      "<circle cx='50' cy='50' r='34' fill='none' stroke='#E8A33D' stroke-width='7'/>" +
+      "<path d='M50 30 L50 52 L66 62' fill='none' stroke='#E8A33D' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/>" +
+      "</svg>";
+    return "data:image/svg+xml;base64," + btoa(svg);
+  };
+  var icon = buildIcon();
+  var manifest = {
+    name: "RESET — 3:00 Daily Review",
+    short_name: "RESET",
+    description: "Daily 3:00 PM task review, quote follow-up manager, and PDF export tool.",
+    start_url: ".",
+    scope: ".",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#1C1B1A",
+    theme_color: "#1C1B1A",
+    icons: [
+      { src: icon, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+      { src: icon, sizes: "512x512", type: "image/svg+xml", purpose: "any" },
+      { src: icon, sizes: "192x192", type: "image/svg+xml", purpose: "maskable" }
+    ]
+  };
+  var link = document.createElement("link");
+  link.rel = "manifest";
+  link.href = "data:application/manifest+json;base64," + btoa(JSON.stringify(manifest));
+  document.head.appendChild(link);
+
+  var appleTouch = document.createElement("link");
+  appleTouch.rel = "apple-touch-icon";
+  appleTouch.href = icon;
+  document.head.appendChild(appleTouch);
+
+  var favicon = document.createElement("link");
+  favicon.rel = "icon";
+  favicon.href = icon;
+  document.head.appendChild(favicon);
+
+  window.__RESET_ICON__ = icon;
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+  :root{
+    --bg:#1C1B1A;
+    --surface:#242220;
+    --surface-2:#2C2A27;
+    --surface-3:#332F2B;
+    --border:#3A3733;
+    --border-soft:#2F2C29;
+    --text:#F2EFE9;
+    --text-muted:#A79E92;
+    --text-faint:#7A7268;
+    --accent:#E8A33D;
+    --accent-ink:#1C1408;
+    --urgent:#C4432B;
+    --urgent-soft:#3A241E;
+    --high:#D98F2B;
+    --high-soft:#3A2E19;
+    --routine:#8B8578;
+    --routine-soft:#2B2925;
+    --waiting:#5B564E;
+    --done:#5E8368;
+    --done-soft:#20291F;
+    --danger:#C4432B;
+    --focus:#E8A33D;
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  html,body{ background:var(--bg); color:var(--text); font-family:'Archivo',ui-sans-serif,system-ui,sans-serif; }
+  body{ overscroll-behavior-y:none; }
+  ::selection{ background:var(--accent); color:var(--accent-ink); }
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+  input:focus-visible, button:focus-visible, textarea:focus-visible, a:focus-visible, [tabindex]:focus-visible{
+    outline:2px solid var(--focus); outline-offset:2px;
+  }
+  input[type=range]{ -webkit-appearance:none; appearance:none; height:8px; border-radius:999px; background:var(--surface-3); }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:26px; height:26px; border-radius:999px; background:var(--accent); border:3px solid var(--bg); box-shadow:0 0 0 1px var(--border); cursor:pointer; }
+  input[type=range]::-moz-range-thumb{ width:26px; height:26px; border-radius:999px; background:var(--accent); border:3px solid var(--bg); cursor:pointer; }
+  .modal-enter{ animation: modalIn .18s ease-out; }
+  @keyframes modalIn{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce){ .modal-enter{ animation:none; } * { transition:none !important; } }
+  .pulse-rec{ animation:pulseRec 1.1s ease-in-out infinite; }
+  @keyframes pulseRec{ 0%,100%{ box-shadow:0 0 0 0 rgba(196,67,43,.55);} 50%{ box-shadow:0 0 0 10px rgba(196,67,43,0);} }
+  .drag-handle{ width:36px; height:4px; border-radius:999px; background:var(--border); margin:0 auto; }
+  .task-card.dragging{ opacity:.55; }
+  textarea{ resize:vertical; }
+</style>
+</head>
+<body class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+
+<div id="app-root"></div>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   STORAGE
+   ========================================================================= */
+const STORAGE_KEY = "reset3pm_v1";
+
+function todayKey(d) {
+  d = d || new Date();
+  return d.toLocaleDateString("en-CA"); // YYYY-MM-DD in local time
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function nextTopOrder() {
+  if (STATE.tasks.length === 0) return 0;
+  return Math.min.apply(null, STATE.tasks.map(t => t.order || 0)) - 10;
+}
+
+function migrateTaskOrder(tasks) {
+  const missing = tasks.filter(t => t.order === undefined || t.order === null);
+  if (missing.length === 0) return;
+  const sorted = [...missing].sort((a, b) => b.priority - a.priority);
+  sorted.forEach((t, i) => { t.order = i * 10; });
+}
+
+function escapeHtml(str) {
+  if (str === undefined || str === null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function defaultState() {
+  return {
+    tasks: [],
+    brainDump: [],
+    settings: {
+      onboarded: false,
+      phone: "",
+      webhookUrl: "",
+      notifEnabled: false,
+      soundEnabled: true,
+      lastReviewDate: null,
+      lastChimeDate: null
+    }
+  };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    const base = defaultState();
+    const tasks = Array.isArray(parsed.tasks) ? parsed.tasks : [];
+    migrateTaskOrder(tasks);
+    return {
+      tasks,
+      brainDump: Array.isArray(parsed.brainDump) ? parsed.brainDump : [],
+      settings: Object.assign({}, base.settings, parsed.settings || {})
+    };
+  } catch (e) {
+    console.error("RESET: failed to load state, starting fresh.", e);
+    return defaultState();
+  }
+}
+
+let STATE = loadState();
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  } catch (e) {
+    console.error("RESET: failed to save state.", e);
+    toast("Couldn't save — storage may be full.", "error");
+  }
+}
+
+/* =========================================================================
+   TOASTS
+   ========================================================================= */
+function toast(message, kind) {
+  const host = document.getElementById("toast-host");
+  if (!host) return;
+  const el = document.createElement("div");
+  const color = kind === "error" ? "var(--urgent)" : kind === "success" ? "var(--done)" : "var(--surface-3)";
+  el.className = "modal-enter px-4 py-3 rounded-lg text-sm font-medium shadow-lg border";
+  el.style.background = "var(--surface-2)";
+  el.style.borderColor = color;
+  el.style.color = "var(--text)";
+  el.textContent = message;
+  host.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = "opacity .3s ease";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 300);
+  }, 2600);
+}
+
+/* =========================================================================
+   PRIORITY HELPERS
+   ========================================================================= */
+function priorityBand(p) {
+  if (p >= 5) return { label: "Urgent", color: "var(--urgent)", soft: "var(--urgent-soft)" };
+  if (p === 4) return { label: "High", color: "var(--high)", soft: "var(--high-soft)" };
+  return { label: "Routine", color: "var(--routine)", soft: "var(--routine-soft)" };
+}
+
+/* =========================================================================
+   TASK CRUD
+   ========================================================================= */
+function createTask(data) {
+  const task = {
+    id: uid(),
+    kind: data.kind || "task",
+    title: (data.title || "").trim(),
+    notes: (data.notes || "").trim(),
+    contact: (data.contact || "").trim(),
+    phone: (data.phone || "").trim(),
+    address: (data.address || "").trim(),
+    priority: data.priority ? Number(data.priority) : 3,
+    order: nextTopOrder(),
+    status: "active",
+    waitingNote: "",
+    createdAt: new Date().toISOString(),
+    dateKey: todayKey(),
+    completedAt: null,
+    carriedOver: false
+  };
+  STATE.tasks.unshift(task);
+  saveState();
+  return task;
+}
+
+function updateTask(id, patch) {
+  const t = STATE.tasks.find(t => t.id === id);
+  if (!t) return;
+  Object.assign(t, patch);
+  saveState();
+}
+
+function deleteTask(id) {
+  STATE.tasks = STATE.tasks.filter(t => t.id !== id);
+  saveState();
+}
+
+function toggleDone(id) {
+  const t = STATE.tasks.find(t => t.id === id);
+  if (!t) return;
+  if (t.status === "done") {
+    updateTask(id, { status: "active", completedAt: null });
+  } else {
+    updateTask(id, { status: "done", completedAt: new Date().toISOString() });
+    toast("Marked done.", "success");
+  }
+  render();
+}
+
+function toggleWaiting(id, note) {
+  const t = STATE.tasks.find(t => t.id === id);
+  if (!t) return;
+  if (t.status === "waiting") {
+    updateTask(id, { status: "active", waitingNote: "" });
+  } else {
+    updateTask(id, { status: "waiting", waitingNote: note || t.waitingNote || "Waiting on response" });
+  }
+  render();
+}
+
+/* =========================================================================
+   BRAIN DUMP
+   ========================================================================= */
+function addBrainDump(text) {
+  text = (text || "").trim();
+  if (!text) return;
+  STATE.brainDump.unshift({ id: uid(), text, createdAt: new Date().toISOString(), processed: false });
+  saveState();
+  toast("Captured. It'll surface at your 3:00 review.", "success");
+}
+
+function unprocessedBrainDump() {
+  return STATE.brainDump.filter(b => !b.processed);
+}
+
+/* =========================================================================
+   ICS + OUTLOOK
+   ========================================================================= */
+function toICSDate(dt) {
+  return dt.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+}
+
+function buildICS(task, start, end) {
+  const now = toICSDate(new Date());
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//RESET 3PM Review//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    "UID:" + uid() + "@reset3pm",
+    "DTSTAMP:" + now,
+    "DTSTART:" + toICSDate(start),
+    "DTEND:" + toICSDate(end),
+    "SUMMARY:" + icsEscape(task.title),
+    "LOCATION:" + icsEscape(task.address || ""),
+    "DESCRIPTION:" + icsEscape(buildEventBody(task)),
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ];
+  return lines.join("\r\n");
+}
+
+function icsEscape(str) {
+  return String(str || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+}
+
+function buildEventBody(task) {
+  const parts = [];
+  if (task.contact) parts.push("Contact: " + task.contact);
+  if (task.phone) parts.push("Phone: " + task.phone);
+  if (task.notes) parts.push("Notes: " + task.notes);
+  return parts.join("\n");
+}
+
+function downloadICS(task, start, end) {
+  const ics = buildICS(task, start, end);
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = (task.title || "appointment").replace(/[^a-z0-9\-_]+/gi, "_") + ".ics";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+function outlookWebUrl(host, task, start, end) {
+  const params = new URLSearchParams({
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    subject: task.title || "",
+    location: task.address || "",
+    body: buildEventBody(task),
+    startdt: start.toISOString(),
+    enddt: end.toISOString()
+  });
+  return "https://" + host + "/calendar/0/deeplink/compose?" + params.toString();
+}
+
+/* =========================================================================
+   SPEECH RECOGNITION
+   ========================================================================= */
+let recognition = null;
+let recognizing = false;
+
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = false;
+  r.interimResults = true;
+  r.lang = "en-AU";
+  return r;
+}
+
+function toggleMic(inputEl, btnEl) {
+  if (!recognition) recognition = initSpeech();
+  if (!recognition) {
+    toast("Voice capture isn't supported in this browser — type instead.", "error");
+    return;
+  }
+  if (recognizing) {
+    recognition.stop();
+    return;
+  }
+  let finalText = "";
+  recognition.onstart = () => {
+    recognizing = true;
+    btnEl.classList.add("pulse-rec");
+    btnEl.style.background = "var(--urgent)";
+  };
+  recognition.onresult = (e) => {
+    let interim = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    inputEl.value = (finalText + " " + interim).trim();
+  };
+  recognition.onerror = () => {
+    toast("Didn't catch that — try typing.", "error");
+  };
+  recognition.onend = () => {
+    recognizing = false;
+    btnEl.classList.remove("pulse-rec");
+    btnEl.style.background = "";
+  };
+  try { recognition.start(); } catch (e) { /* already started, ignore */ }
+}
+
+/* =========================================================================
+   3:00 PM CHIME + NOTIFICATIONS
+   ========================================================================= */
+function playChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [880, 1108, 1318];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime + i * 0.18);
+      gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + i * 0.18 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.18 + 0.5);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + i * 0.18);
+      osc.stop(ctx.currentTime + i * 0.18 + 0.55);
+    });
+  } catch (e) { console.error("Chime failed", e); }
+}
+
+function fireThreeOClockAlert(isTest) {
+  if (STATE.settings.soundEnabled) playChime();
+  if (STATE.settings.notifEnabled && "Notification" in window && Notification.permission === "granted") {
+    try {
+      new Notification("3:00 PM Review", {
+        body: "Time to sort today's work — " + (unprocessedBrainDump().length) + " new item(s) waiting.",
+        icon: window.__RESET_ICON__
+      });
+    } catch (e) { /* ignore */ }
+  }
+  if (STATE.settings.webhookUrl) {
+    fetch(STATE.settings.webhookUrl, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "3pm_review", time: new Date().toISOString(), test: !!isTest })
+    }).catch(() => { /* best-effort, ignore network/CORS errors */ });
+  }
+  if (!isTest) STATE.settings.lastChimeDate = todayKey();
+  saveState();
+}
+
+function startChimeWatcher() {
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 15 && now.getMinutes() === 0 && STATE.settings.lastChimeDate !== todayKey()) {
+      fireThreeOClockAlert(false);
+      renderHeaderBadges();
+    }
+  }, 20000);
+}
+
+/* =========================================================================
+   PDF EXPORT
+   ========================================================================= */
+function exportPDF() {
+  const { jsPDF } = window.jspdf || {};
+  if (!jsPDF) { toast("PDF library failed to load — check your connection.", "error"); return; }
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const pageW = doc.internal.pageSize.getWidth();
+  const marginX = 40;
+  let y = 48;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.setTextColor(20, 20, 20);
+  doc.text("3:00 PM Field Review", marginX, y);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+  doc.setTextColor(90, 90, 90);
+  const dateStr = new Date().toLocaleDateString("en-AU", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  doc.text(dateStr, pageW - marginX, y, { align: "right" });
+  y += 14;
+  doc.setDrawColor(210, 210, 210);
+  doc.line(marginX, y, pageW - marginX, y);
+  y += 20;
+
+  const active = STATE.tasks.filter(t => t.status !== "done").sort((a, b) => b.priority - a.priority);
+
+  if (active.length === 0) {
+    doc.setFontSize(12);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Nothing outstanding — clean slate.", marginX, y);
+  } else {
+    const availableH = doc.internal.pageSize.getHeight() - y - 130; // reserve space for notes area
+    const rowH = Math.max(34, Math.min(58, availableH / active.length));
+    const bandColor = (p) => p >= 5 ? [196, 67, 43] : p === 4 ? [217, 143, 43] : [140, 140, 140];
+    const bandLabel = (p) => p >= 5 ? "URGENT" : p === 4 ? "HIGH" : "ROUTINE";
+
+    active.forEach((t) => {
+      // checkbox
+      doc.setDrawColor(60, 60, 60);
+      doc.rect(marginX, y - 11, 12, 12);
+      // priority chip
+      const c = bandColor(t.priority);
+      doc.setFillColor(c[0], c[1], c[2]);
+      doc.roundedRect(marginX + 20, y - 12, 62, 15, 3, 3, "F");
+      doc.setFontSize(8);
+      doc.setTextColor(255, 255, 255);
+      doc.text(bandLabel(t.priority), marginX + 51, y - 1.5, { align: "center" });
+      // title
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(20, 20, 20);
+      let title = t.title || "(untitled)";
+      if (t.status === "waiting") title += "  [Waiting]";
+      doc.text(title, marginX + 92, y, { maxWidth: pageW - marginX * 2 - 92 });
+      // meta line
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9.5);
+      doc.setTextColor(100, 100, 100);
+      const metaParts = [];
+      if (t.contact) metaParts.push(t.contact);
+      if (t.phone) metaParts.push(t.phone);
+      if (t.address) metaParts.push(t.address);
+      if (metaParts.length) doc.text(metaParts.join("   ·   "), marginX + 92, y + 13, { maxWidth: pageW - marginX * 2 - 92 });
+
+      y += rowH;
+      doc.setDrawColor(230, 230, 230);
+      doc.line(marginX, y - rowH + 20, pageW - marginX, y - rowH + 20);
+    });
+  }
+
+  // notes area
+  const notesY = doc.internal.pageSize.getHeight() - 110;
+  doc.setDrawColor(200, 200, 200);
+  doc.line(marginX, notesY, pageW - marginX, notesY);
+  doc.setFontSize(10);
+  doc.setTextColor(120, 120, 120);
+  doc.text("Site notes", marginX, notesY + 16);
+  for (let i = 0; i < 3; i++) {
+    const ly = notesY + 34 + i * 22;
+    doc.setDrawColor(215, 215, 215);
+    doc.line(marginX, ly, pageW - marginX, ly);
+  }
+
+  doc.save("3pm-review-" + todayKey() + ".pdf");
+}
+
+/* =========================================================================
+   SERVICE WORKER (best-effort — inline via Blob URL; requires a Chromium
+   browser and http(s) origin. App works fully without it.)
+   ========================================================================= */
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  if (location.protocol === "file:") return; // SW cannot register from local files
+  const swSource = [
+    "const CACHE = 'reset3pm-v1';",
+    "self.addEventListener('install', (e) => { self.skipWaiting(); });",
+    "self.addEventListener('activate', (e) => { self.clients.claim(); });",
+    "self.addEventListener('fetch', (e) => {",
+    "  e.respondWith(",
+    "    caches.open(CACHE).then((cache) =>",
+    "      fetch(e.request).then((res) => { cache.put(e.request, res.clone()); return res; })",
+    "        .catch(() => cache.match(e.request))",
+    "    )",
+    "  );",
+    "});"
+  ].join("\n");
+  try {
+    const blob = new Blob([swSource], { type: "application/javascript" });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(() => { /* not supported here — ignore */ });
+  } catch (e) { /* ignore */ }
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById("btn-install");
+  if (btn) btn.classList.remove("hidden");
+});
+
+/* =========================================================================
+   RENDERING
+   ========================================================================= */
+let activeTab = "active"; // active | waiting | done
+let editingTaskId = null;
+let bookingTaskId = null;
+let reviewStep = 1;
+
+function el(html) {
+  const t = document.createElement("template");
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+function iconsRefresh() {
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function render() {
+  const root = document.getElementById("app-root");
+  if (!STATE.settings.onboarded) {
+    root.innerHTML = renderOnboarding();
+    bindOnboarding();
+    iconsRefresh();
+    return;
+  }
+  root.innerHTML = renderApp();
+  bindApp();
+  iconsRefresh();
+}
+
+/* ---------- Onboarding ---------- */
+function renderOnboarding() {
+  return `
+  <div class="min-h-screen flex flex-col justify-center px-6 py-10 max-w-md mx-auto">
+    <div class="mb-8">
+      <div class="w-14 h-14 rounded-2xl bg-[var(--accent)] flex items-center justify-center mb-5">
+        <i data-lucide="check-circle-2" class="w-8 h-8" style="color:var(--accent-ink)"></i>
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight">RESET</h1>
+      <p class="text-[var(--text-muted)] mt-2 leading-relaxed">One list. One review, every day at 3:00. Nothing gets forgotten.</p>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-[var(--text-muted)] mb-1.5">Your mobile number</label>
+        <div class="flex items-center rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden focus-within:border-[var(--accent)]">
+          <span class="pl-4 pr-2 text-[var(--text-muted)] font-medium">+61</span>
+          <input id="ob-phone" type="tel" placeholder="4XX XXX XXX" class="flex-1 bg-transparent py-3.5 pr-4 outline-none text-[var(--text)] placeholder:text-[var(--text-faint)]" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--text-muted)] mb-1.5">Reminder webhook <span class="text-[var(--text-faint)] font-normal">(optional)</span></label>
+        <input id="ob-webhook" type="url" placeholder="https://..." class="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-3.5 px-4 outline-none text-[var(--text)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)]" />
+      </div>
+      <button id="ob-continue" class="w-full bg-[var(--accent)] text-[var(--accent-ink)] font-bold py-4 rounded-xl text-base active:scale-[0.98] transition-transform mt-2">
+        Set up RESET
+      </button>
+      <p class="text-xs text-[var(--text-faint)] text-center leading-relaxed">Everything stays on this device. You can turn on alerts and sound afterwards in Settings.</p>
+    </div>
+  </div>`;
+}
+
+function bindOnboarding() {
+  const btn = document.getElementById("ob-continue");
+  btn.addEventListener("click", () => {
+    const phoneRaw = document.getElementById("ob-phone").value.trim();
+    if (!phoneRaw) { toast("Enter a mobile number to continue.", "error"); return; }
+    STATE.settings.phone = "+61" + phoneRaw.replace(/\D/g, "");
+    STATE.settings.webhookUrl = document.getElementById("ob-webhook").value.trim();
+    STATE.settings.onboarded = true;
+    saveState();
+    render();
+    toast("You're set up. Tap + to add your first task or quote.", "success");
+  });
+}
+
+/* ---------- Main App Shell ---------- */
+function renderApp() {
+  const outstanding = STATE.tasks.filter(t => t.status !== "done" && t.dateKey < todayKey()).length + unprocessedBrainDump().length;
+  return `
+  <div class="max-w-md mx-auto min-h-screen flex flex-col">
+    <header class="sticky top-0 z-30 bg-[var(--bg)]/95 backdrop-blur border-b border-[var(--border-soft)] px-4 pt-4 pb-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="clock" class="text-2xl font-extrabold tabular-nums tracking-tight"></div>
+          <div id="date-line" class="text-xs text-[var(--text-muted)] font-medium"></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-pdf" title="Download Daily PDF" class="w-10 h-10 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center active:scale-95 transition-transform">
+            <i data-lucide="file-down" class="w-5 h-5"></i>
+          </button>
+          <button id="btn-settings" title="Settings" class="w-10 h-10 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center active:scale-95 transition-transform">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+      <button id="btn-review" class="mt-3 w-full flex items-center justify-center gap-2 bg-[var(--accent)] text-[var(--accent-ink)] font-bold py-3 rounded-xl active:scale-[0.98] transition-transform relative">
+        <i data-lucide="list-checks" class="w-5 h-5"></i>
+        Start 3:00 Review
+        ${outstanding > 0 ? `<span class="absolute -top-2 -right-2 bg-[var(--urgent)] text-white text-[11px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-[var(--bg)]">${outstanding > 9 ? "9+" : outstanding}</span>` : ""}
+      </button>
+    </header>
+
+    <div class="px-4 pt-3">
+      <div class="flex items-center gap-2 rounded-xl bg-[var(--surface)] p-2 mb-1">
+        <input id="quick-dump-input" type="text" placeholder="Quick dump a thought or task..." class="flex-1 bg-transparent outline-none text-sm px-2 placeholder:text-[var(--text-faint)]" />
+        <button id="btn-mic" title="Speak" class="w-10 h-10 rounded-full bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center shrink-0 active:scale-95 transition-transform">
+          <i data-lucide="mic" class="w-4.5 h-4.5"></i>
+        </button>
+        <button id="btn-dump-save" title="Save to Brain Dump" class="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center shrink-0 active:scale-95 transition-transform">
+          <i data-lucide="check" class="w-5 h-5" style="color:var(--accent-ink)"></i>
+        </button>
+      </div>
+      <p class="text-[11px] text-[var(--text-faint)] px-1 mb-2">Saved instantly — sort it later at your 3:00 review.</p>
+    </div>
+
+    <div class="px-4 flex gap-1.5 mb-2">
+      ${renderTabButton("active", "Active", STATE.tasks.filter(t => t.status === "active").length)}
+      ${renderTabButton("waiting", "Waiting", STATE.tasks.filter(t => t.status === "waiting").length)}
+      ${renderTabButton("done", "Done", STATE.tasks.filter(t => t.status === "done" && t.dateKey === todayKey()).length)}
+    </div>
+
+    <main class="flex-1 px-4 pb-28 space-y-2.5" id="task-list">
+      ${renderTaskList()}
+    </main>
+
+    <button id="btn-add-task" class="fixed bottom-6 right-1/2 translate-x-[9.5rem] z-40 w-14 h-14 rounded-full bg-[var(--accent)] text-[var(--accent-ink)] shadow-2xl flex items-center justify-center active:scale-95 transition-transform">
+      <i data-lucide="plus" class="w-7 h-7"></i>
+    </button>
+  </div>
+
+  <div id="toast-host" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 px-4 w-full max-w-md pointer-events-none"></div>
+  <div id="modal-host"></div>
+  `;
+}
+
+function renderTabButton(key, label, count) {
+  const isActive = activeTab === key;
+  return `<button data-tab="${key}" class="tab-btn flex-1 py-2 rounded-lg text-sm font-semibold border transition-colors ${isActive ? "bg-[var(--surface-3)] border-[var(--border)] text-[var(--text)]" : "bg-transparent border-transparent text-[var(--text-muted)]"}">
+    ${label}${count ? ` <span class="text-[11px] font-bold ${isActive ? "text-[var(--accent)]" : "text-[var(--text-faint)]"}">${count}</span>` : ""}
+  </button>`;
+}
+
+function renderTaskList() {
+  let list;
+  if (activeTab === "active") list = STATE.tasks.filter(t => t.status === "active");
+  else if (activeTab === "waiting") list = STATE.tasks.filter(t => t.status === "waiting");
+  else list = STATE.tasks.filter(t => t.status === "done").sort((a, b) => (b.completedAt || "").localeCompare(a.completedAt || ""));
+
+  if (activeTab !== "done") list = list.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+  if (list.length === 0) {
+    const messages = {
+      active: ["inbox", "Nothing active. Tap + to add a task or quote."],
+      waiting: ["clock", "Nothing waiting on anyone right now."],
+      done: ["circle-check", "Nothing checked off yet today."]
+    };
+    const [icon, msg] = messages[activeTab];
+    return `<div class="flex flex-col items-center justify-center text-center py-16 text-[var(--text-faint)]">
+      <i data-lucide="${icon}" class="w-9 h-9 mb-3 opacity-60"></i>
+      <p class="text-sm max-w-[220px]">${msg}</p>
+    </div>`;
+  }
+
+  return list.map(renderTaskCard).join("");
+}
+
+function renderTaskCard(t) {
+  const band = priorityBand(t.priority);
+  const isDone = t.status === "done";
+  const isWaiting = t.status === "waiting";
+  return `
+  <div class="task-card rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden ${isWaiting ? "opacity-60" : ""}" data-id="${t.id}">
+    <div class="flex">
+      <div class="w-1.5 shrink-0" style="background:${band.color}"></div>
+      ${!isDone ? `<button class="drag-handle-btn shrink-0 w-8 flex items-center justify-center touch-none cursor-grab active:cursor-grabbing" aria-label="Drag to reorder">
+        <i data-lucide="grip-vertical" class="w-4 h-4" style="color:var(--text-faint)"></i>
+      </button>` : ""}
+      <div class="flex-1 p-3.5">
+        <div class="flex items-start gap-3">
+          <button class="btn-toggle-done mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors" style="border-color:${isDone ? "var(--done)" : "var(--border)"}; background:${isDone ? "var(--done)" : "transparent"}">
+            ${isDone ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ""}
+          </button>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-semibold text-[15px] leading-snug ${isDone ? "line-through text-[var(--text-faint)]" : ""}">${escapeHtml(t.title)}</span>
+              <span class="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded" style="background:${band.soft};color:${band.color}">${t.kind === "quote" ? "Quote" : "Task"}</span>
+            </div>
+            ${t.notes ? `<p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">${escapeHtml(t.notes)}</p>` : ""}
+            ${isWaiting ? `<span class="inline-flex items-center gap-1 mt-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--surface-3);color:var(--text-muted)"><i data-lucide="hourglass" class="w-3 h-3"></i>${escapeHtml(t.waitingNote || "Waiting on response")}</span>` : ""}
+            ${(t.contact || t.phone || t.address) ? `
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-[var(--text-muted)]">
+                ${t.contact ? `<span class="inline-flex items-center gap-1"><i data-lucide="user" class="w-3.5 h-3.5"></i>${escapeHtml(t.contact)}</span>` : ""}
+                ${t.phone ? `<a href="tel:${escapeHtml(t.phone)}" class="inline-flex items-center gap-1 text-[var(--accent)] font-medium"><i data-lucide="phone" class="w-3.5 h-3.5"></i>${escapeHtml(t.phone)}</a>` : ""}
+                ${t.address ? `<span class="inline-flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${escapeHtml(t.address)}</span>` : ""}
+              </div>` : ""}
+          </div>
+        </div>
+
+        ${!isDone ? `
+        <div class="flex items-center gap-1.5 mt-3 pt-3 border-t border-[var(--border-soft)] flex-wrap">
+          ${t.phone ? `<a href="tel:${escapeHtml(t.phone)}" class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[var(--surface-2)] active:scale-95 transition-transform"><i data-lucide="phone-call" class="w-3.5 h-3.5"></i>Call</a>` : ""}
+          <button class="btn-book flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[var(--surface-2)] active:scale-95 transition-transform"><i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>Book in Outlook</button>
+          <button class="btn-waiting flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg active:scale-95 transition-transform" style="background:${isWaiting ? "var(--surface-3)" : "var(--surface-2)"}"><i data-lucide="hourglass" class="w-3.5 h-3.5"></i>${isWaiting ? "Clear wait" : "Waiting on"}</button>
+          <button class="btn-edit ml-auto w-8 h-8 rounded-lg bg-[var(--surface-2)] flex items-center justify-center active:scale-95 transition-transform"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+          <button class="btn-delete w-8 h-8 rounded-lg bg-[var(--surface-2)] flex items-center justify-center active:scale-95 transition-transform"><i data-lucide="trash-2" class="w-3.5 h-3.5" style="color:var(--urgent)"></i></button>
+        </div>` : `
+        <div class="flex items-center gap-1.5 mt-2">
+          <button class="btn-delete ml-auto w-8 h-8 rounded-lg bg-[var(--surface-2)] flex items-center justify-center active:scale-95 transition-transform"><i data-lucide="trash-2" class="w-3.5 h-3.5" style="color:var(--urgent)"></i></button>
+        </div>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Header live clock ---------- */
+function tickClock() {
+  const clockEl = document.getElementById("clock");
+  const dateEl = document.getElementById("date-line");
+  if (!clockEl) return;
+  const now = new Date();
+  clockEl.textContent = now.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
+  dateEl.textContent = now.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" });
+}
+setInterval(tickClock, 1000);
+
+function renderHeaderBadges() { render(); }
+
+/* =========================================================================
+   MODALS
+   ========================================================================= */
+function openModal(html) {
+  const host = document.getElementById("modal-host");
+  host.innerHTML = `<div id="modal-backdrop" class="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center">
+    <div class="modal-enter w-full sm:max-w-md max-h-[92vh] overflow-y-auto no-scrollbar bg-[var(--surface)] sm:rounded-2xl rounded-t-2xl border border-[var(--border)] p-5">
+      <div class="drag-handle sm:hidden mb-4"></div>
+      ${html}
+    </div>
+  </div>`;
+  iconsRefresh();
+  document.getElementById("modal-backdrop").addEventListener("click", (e) => {
+    if (e.target.id === "modal-backdrop") closeModal();
+  });
+}
+function closeModal() {
+  document.getElementById("modal-host").innerHTML = "";
+}
+
+/* ---------- Add / Edit Task Modal ---------- */
+function openTaskModal(id) {
+  editingTaskId = id || null;
+  const t = id ? STATE.tasks.find(x => x.id === id) : null;
+  const band = priorityBand(t ? t.priority : 3);
+  openModal(`
+    <h2 class="text-lg font-bold mb-4">${t ? "Edit" : "New"} task or quote</h2>
+    <div class="space-y-3.5">
+      <div class="flex gap-2">
+        <button type="button" data-kind="task" class="kind-btn flex-1 py-2.5 rounded-lg text-sm font-semibold border ${((t ? t.kind : "task") === "task") ? "border-[var(--accent)] text-[var(--accent)]" : "border-[var(--border)] text-[var(--text-muted)]"}">Task</button>
+        <button type="button" data-kind="quote" class="kind-btn flex-1 py-2.5 rounded-lg text-sm font-semibold border ${((t ? t.kind : "task") === "quote") ? "border-[var(--accent)] text-[var(--accent)]" : "border-[var(--border)] text-[var(--text-muted)]"}">Quote</button>
+      </div>
+      <input id="tm-title" type="text" placeholder="What needs doing?" value="${escapeHtml(t ? t.title : "")}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
+      <textarea id="tm-notes" rows="2" placeholder="Notes (optional)" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]">${escapeHtml(t ? t.notes : "")}</textarea>
+      <div class="grid grid-cols-2 gap-2.5">
+        <input id="tm-contact" type="text" placeholder="Contact name" value="${escapeHtml(t ? t.contact : "")}" class="bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
+        <input id="tm-phone" type="tel" placeholder="Phone" value="${escapeHtml(t ? t.phone : "")}" class="bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
+      </div>
+      <input id="tm-address" type="text" placeholder="Site location / address" value="${escapeHtml(t ? t.address : "")}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)]" />
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="text-sm font-medium text-[var(--text-muted)]">Priority</label>
+          <span id="tm-priority-label" class="text-sm font-bold" style="color:${band.color}">${band.label}</span>
+        </div>
+        <input id="tm-priority" type="range" min="1" max="5" step="1" value="${t ? t.priority : 3}" class="w-full" />
+      </div>
+    </div>
+    <div class="flex gap-2.5 mt-5">
+      ${t ? `<button id="tm-delete" class="px-4 py-3 rounded-xl bg-[var(--surface-2)] text-[var(--urgent)] font-semibold text-sm">Delete</button>` : ""}
+      <button id="tm-cancel" class="flex-1 py-3 rounded-xl bg-[var(--surface-2)] font-semibold text-sm">Cancel</button>
+      <button id="tm-save" class="flex-1 py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm">Save</button>
+    </div>
+  `);
+
+  let selectedKind = t ? t.kind : "task";
+  document.querySelectorAll(".kind-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedKind = btn.dataset.kind;
+      document.querySelectorAll(".kind-btn").forEach(b => {
+        const on = b.dataset.kind === selectedKind;
+        b.classList.toggle("border-[var(--accent)]", on);
+        b.classList.toggle("text-[var(--accent)]", on);
+        b.classList.toggle("border-[var(--border)]", !on);
+        b.classList.toggle("text-[var(--text-muted)]", !on);
+      });
+    });
+  });
+
+  const priorityInput = document.getElementById("tm-priority");
+  const priorityLabel = document.getElementById("tm-priority-label");
+  priorityInput.addEventListener("input", () => {
+    const b = priorityBand(Number(priorityInput.value));
+    priorityLabel.textContent = b.label;
+    priorityLabel.style.color = b.color;
+  });
+
+  document.getElementById("tm-cancel").addEventListener("click", closeModal);
+  const delBtn = document.getElementById("tm-delete");
+  if (delBtn) delBtn.addEventListener("click", () => {
+    deleteTask(t.id);
+    closeModal();
+    render();
+    toast("Deleted.", "success");
+  });
+
+  document.getElementById("tm-save").addEventListener("click", () => {
+    const title = document.getElementById("tm-title").value.trim();
+    if (!title) { toast("Give it a short title first.", "error"); return; }
+    const payload = {
+      kind: selectedKind,
+      title,
+      notes: document.getElementById("tm-notes").value,
+      contact: document.getElementById("tm-contact").value,
+      phone: document.getElementById("tm-phone").value,
+      address: document.getElementById("tm-address").value,
+      priority: Number(priorityInput.value)
+    };
+    if (t) updateTask(t.id, payload);
+    else createTask(payload);
+    closeModal();
+    render();
+    toast(t ? "Updated." : "Added.", "success");
+  });
+}
+
+/* ---------- Book in Outlook Modal ---------- */
+function openBookModal(id) {
+  bookingTaskId = id;
+  const t = STATE.tasks.find(x => x.id === id);
+  if (!t) return;
+  const now = new Date();
+  now.setMinutes(0, 0, 0);
+  now.setHours(now.getHours() + 1);
+  const dateVal = todayKey(now);
+  const timeVal = now.toTimeString().slice(0, 5);
+
+  openModal(`
+    <h2 class="text-lg font-bold mb-1">Book in Outlook</h2>
+    <p class="text-sm text-[var(--text-muted)] mb-4">${escapeHtml(t.title)}</p>
+    <div class="grid grid-cols-2 gap-2.5 mb-3">
+      <div>
+        <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Date</label>
+        <input id="bm-date" type="date" value="${dateVal}" class="w-full bg-[var(--surface-2)] rounded-lg px-3 py-2.5 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)]" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Start time</label>
+        <input id="bm-time" type="time" value="${timeVal}" class="w-full bg-[var(--surface-2)] rounded-lg px-3 py-2.5 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)]" />
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Duration</label>
+      <select id="bm-duration" class="w-full bg-[var(--surface-2)] rounded-lg px-3 py-2.5 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)]">
+        <option value="30">30 minutes</option>
+        <option value="60" selected>1 hour</option>
+        <option value="90">1.5 hours</option>
+        <option value="120">2 hours</option>
+      </select>
+    </div>
+    <div class="space-y-2">
+      <button id="bm-web" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm active:scale-[0.98] transition-transform">
+        <i data-lucide="external-link" class="w-4 h-4"></i> Open in Outlook Web
+      </button>
+      <button id="bm-web-alt" class="w-full text-xs text-[var(--text-faint)] py-1 underline">Outlook Web not opening? Try alternate link</button>
+      <button id="bm-ics" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--surface-2)] font-bold text-sm active:scale-[0.98] transition-transform">
+        <i data-lucide="download" class="w-4 h-4"></i> Download for Outlook Mobile (.ics)
+      </button>
+    </div>
+    <button id="bm-cancel" class="w-full py-3 mt-3 rounded-xl text-sm font-semibold text-[var(--text-muted)]">Cancel</button>
+  `);
+
+  function getRange() {
+    const d = document.getElementById("bm-date").value;
+    const tm = document.getElementById("bm-time").value;
+    const dur = Number(document.getElementById("bm-duration").value);
+    const start = new Date(d + "T" + tm + ":00");
+    const end = new Date(start.getTime() + dur * 60000);
+    return { start, end };
+  }
+
+  document.getElementById("bm-web").addEventListener("click", () => {
+    const { start, end } = getRange();
+    window.open(outlookWebUrl("outlook.office.com", t, start, end), "_blank");
+  });
+  document.getElementById("bm-web-alt").addEventListener("click", () => {
+    const { start, end } = getRange();
+    window.open(outlookWebUrl("outlook.live.com", t, start, end), "_blank");
+  });
+  document.getElementById("bm-ics").addEventListener("click", () => {
+    const { start, end } = getRange();
+    downloadICS(t, start, end);
+    toast("Calendar file downloaded — open it to add to Outlook Mobile.", "success");
+  });
+  document.getElementById("bm-cancel").addEventListener("click", closeModal);
+}
+
+/* ---------- Waiting Note Modal ---------- */
+function openWaitingModal(id) {
+  const t = STATE.tasks.find(x => x.id === id);
+  if (!t) return;
+  openModal(`
+    <h2 class="text-lg font-bold mb-1">Waiting on someone</h2>
+    <p class="text-sm text-[var(--text-muted)] mb-4">${escapeHtml(t.title)}</p>
+    <input id="wm-note" type="text" placeholder="e.g. Waiting on client approval" value="${escapeHtml(t.waitingNote || "")}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm placeholder:text-[var(--text-faint)] border border-[var(--border)] focus:border-[var(--accent)] mb-4" />
+    <div class="flex gap-2.5">
+      <button id="wm-cancel" class="flex-1 py-3 rounded-xl bg-[var(--surface-2)] font-semibold text-sm">Cancel</button>
+      <button id="wm-save" class="flex-1 py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm">Mark waiting</button>
+    </div>
+  `);
+  document.getElementById("wm-cancel").addEventListener("click", closeModal);
+  document.getElementById("wm-save").addEventListener("click", () => {
+    const note = document.getElementById("wm-note").value.trim() || "Waiting on response";
+    toggleWaiting(id, note);
+    closeModal();
+  });
+}
+
+/* ---------- Settings Modal ---------- */
+function openSettingsModal() {
+  const s = STATE.settings;
+  openModal(`
+    <h2 class="text-lg font-bold mb-4">Settings</h2>
+    <div class="space-y-3.5">
+      <div>
+        <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Mobile number</label>
+        <input id="sm-phone" type="tel" value="${escapeHtml(s.phone)}" class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)]" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Reminder webhook URL</label>
+        <input id="sm-webhook" type="url" value="${escapeHtml(s.webhookUrl)}" placeholder="https://..." class="w-full bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)] placeholder:text-[var(--text-faint)]" />
+      </div>
+      <a id="sm-whatsapp" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--surface-2)] font-semibold text-sm">
+        <i data-lucide="message-circle" class="w-4 h-4"></i> Open WhatsApp chat
+      </a>
+      <div class="flex items-center justify-between py-1">
+        <span class="text-sm font-medium">System notifications</span>
+        <button id="sm-notif" class="w-12 h-7 rounded-full relative transition-colors" style="background:${s.notifEnabled ? "var(--accent)" : "var(--surface-3)"}">
+          <span class="absolute top-1 w-5 h-5 rounded-full bg-white transition-all" style="left:${s.notifEnabled ? "26px" : "4px"}"></span>
+        </button>
+      </div>
+      <div class="flex items-center justify-between py-1">
+        <span class="text-sm font-medium">3:00 PM chime sound</span>
+        <button id="sm-sound" class="w-12 h-7 rounded-full relative transition-colors" style="background:${s.soundEnabled ? "var(--accent)" : "var(--surface-3)"}">
+          <span class="absolute top-1 w-5 h-5 rounded-full bg-white transition-all" style="left:${s.soundEnabled ? "26px" : "4px"}"></span>
+        </button>
+      </div>
+      <button id="sm-test" class="w-full py-3 rounded-xl bg-[var(--surface-2)] font-semibold text-sm flex items-center justify-center gap-2">
+        <i data-lucide="bell-ring" class="w-4 h-4"></i> Test 3:00 PM Alert
+      </button>
+      <button id="btn-install" class="hidden w-full py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm flex items-center justify-center gap-2">
+        <i data-lucide="download" class="w-4 h-4"></i> Install app to home screen
+      </button>
+      <button id="sm-save" class="w-full py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm">Save settings</button>
+      <button id="sm-reset" class="w-full py-3 rounded-xl text-sm font-semibold text-[var(--urgent)]">Erase all data</button>
+    </div>
+  `);
+
+  document.getElementById("sm-whatsapp").href = "https://wa.me/" + (s.phone || "").replace(/\D/g, "");
+
+  document.getElementById("sm-notif").addEventListener("click", async () => {
+    if (!s.notifEnabled) {
+      if ("Notification" in window) {
+        const perm = await Notification.requestPermission();
+        s.notifEnabled = perm === "granted";
+        if (perm !== "granted") toast("Notifications blocked in browser settings.", "error");
+      } else {
+        toast("Notifications aren't supported in this browser.", "error");
+      }
+    } else {
+      s.notifEnabled = false;
+    }
+    saveState();
+    openSettingsModal();
+  });
+
+  document.getElementById("sm-sound").addEventListener("click", () => {
+    s.soundEnabled = !s.soundEnabled;
+    saveState();
+    openSettingsModal();
+  });
+
+  document.getElementById("sm-test").addEventListener("click", () => fireThreeOClockAlert(true));
+
+  if (deferredInstallPrompt) document.getElementById("btn-install").classList.remove("hidden");
+  document.getElementById("btn-install").addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+  });
+
+  document.getElementById("sm-save").addEventListener("click", () => {
+    s.phone = "+61" + document.getElementById("sm-phone").value.replace(/^\+?61/, "").replace(/\D/g, "");
+    s.webhookUrl = document.getElementById("sm-webhook").value.trim();
+    saveState();
+    closeModal();
+    toast("Settings saved.", "success");
+  });
+
+  document.getElementById("sm-reset").addEventListener("click", () => {
+    if (confirm("Erase all tasks, quotes, and brain dump items? This can't be undone.")) {
+      STATE = defaultState();
+      STATE.settings.onboarded = true;
+      saveState();
+      closeModal();
+      render();
+      toast("All data erased.", "success");
+    }
+  });
+}
+
+/* =========================================================================
+   3:00 REVIEW WIZARD
+   ========================================================================= */
+function openReviewWizard() {
+  reviewStep = 1;
+  renderReviewStep();
+}
+
+function renderReviewStep() {
+  const outstanding = STATE.tasks.filter(t => t.status !== "done").sort((a, b) => b.priority - a.priority);
+  const dumpItems = unprocessedBrainDump();
+
+  let body = "";
+  if (reviewStep === 1) {
+    body = `
+      <p class="text-sm text-[var(--text-muted)] mb-4">Tick off what's done. Anything left unchecked carries straight into today — no extra step.</p>
+      <div class="space-y-2 max-h-[50vh] overflow-y-auto no-scrollbar">
+        ${outstanding.length === 0 ? `<p class="text-sm text-[var(--text-faint)] py-6 text-center">Nothing outstanding. Clean slate.</p>` :
+          outstanding.map(t => `
+          <label class="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-2)] cursor-pointer">
+            <input type="checkbox" data-review-done="${t.id}" class="w-5 h-5 accent-[var(--accent)]" />
+            <span class="flex-1 text-sm font-medium">${escapeHtml(t.title)}</span>
+            <span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded" style="background:${priorityBand(t.priority).soft};color:${priorityBand(t.priority).color}">${priorityBand(t.priority).label}</span>
+          </label>`).join("")}
+      </div>
+    `;
+  } else if (reviewStep === 2) {
+    body = `
+      <p class="text-sm text-[var(--text-muted)] mb-4">Sort what's in your brain dump, and add anything new that's come in.</p>
+      <div class="space-y-2 max-h-[34vh] overflow-y-auto no-scrollbar mb-4">
+        ${dumpItems.length === 0 ? `<p class="text-sm text-[var(--text-faint)] py-4 text-center">Brain dump is empty.</p>` :
+          dumpItems.map(b => `
+          <div class="p-3 rounded-lg bg-[var(--surface-2)]" data-dump-id="${b.id}">
+            <p class="text-sm font-medium mb-2">${escapeHtml(b.text)}</p>
+            <div class="flex gap-2">
+              <button class="dump-to-task text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[var(--accent)] text-[var(--accent-ink)]">Add as task</button>
+              <button class="dump-dismiss text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[var(--surface-3)] text-[var(--text-muted)]">Dismiss</button>
+            </div>
+          </div>`).join("")}
+      </div>
+      <label class="block text-xs font-medium text-[var(--text-muted)] mb-1">Add a new quote or task request</label>
+      <div class="flex gap-2">
+        <input id="rv-new-item" type="text" placeholder="e.g. Quote for ducted system, 12 Bell St" class="flex-1 bg-[var(--surface-2)] rounded-lg px-3.5 py-3 outline-none text-sm border border-[var(--border)] focus:border-[var(--accent)] placeholder:text-[var(--text-faint)]" />
+        <button id="rv-new-item-add" class="px-4 rounded-lg bg-[var(--surface-2)] font-semibold text-sm">Add</button>
+      </div>
+    `;
+  } else {
+    const forSort = STATE.tasks.filter(t => t.status === "active").sort((a, b) => b.priority - a.priority);
+    body = `
+      <p class="text-sm text-[var(--text-muted)] mb-4">Drag each slider to set today's priority. The list re-sorts as you go.</p>
+      <div class="space-y-4 max-h-[54vh] overflow-y-auto no-scrollbar pr-1" id="rv-priority-list">
+        ${forSort.length === 0 ? `<p class="text-sm text-[var(--text-faint)] py-6 text-center">Nothing active to prioritise.</p>` :
+          forSort.map(t => `
+          <div class="p-3 rounded-lg bg-[var(--surface-2)]" data-priority-id="${t.id}">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold">${escapeHtml(t.title)}</span>
+              <span class="rv-band text-xs font-bold" style="color:${priorityBand(t.priority).color}">${priorityBand(t.priority).label}</span>
+            </div>
+            <input type="range" min="1" max="5" step="1" value="${t.priority}" class="w-full rv-slider" />
+          </div>`).join("")}
+      </div>
+    `;
+  }
+
+  openModal(`
+    <div class="flex items-center justify-between mb-1">
+      <h2 class="text-lg font-bold">3:00 Review — Step ${reviewStep} of 3</h2>
+      <button id="rv-close" class="w-8 h-8 rounded-full bg-[var(--surface-2)] flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div class="flex gap-1.5 mb-4">
+      ${[1,2,3].map(n => `<div class="flex-1 h-1.5 rounded-full" style="background:${n <= reviewStep ? "var(--accent)" : "var(--surface-3)"}"></div>`).join("")}
+    </div>
+    <div id="rv-body">${body}</div>
+    <div class="flex gap-2.5 mt-5">
+      ${reviewStep > 1 ? `<button id="rv-back" class="px-4 py-3 rounded-xl bg-[var(--surface-2)] font-semibold text-sm">Back</button>` : ""}
+      <button id="rv-next" class="flex-1 py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm">${reviewStep < 3 ? "Continue" : "Finish review"}</button>
+    </div>
+  `);
+
+  bindReviewStep(outstanding);
+}
+
+function bindReviewStep() {
+  document.getElementById("rv-close").addEventListener("click", closeModal);
+  const backBtn = document.getElementById("rv-back");
+  if (backBtn) backBtn.addEventListener("click", () => { reviewStep -= 1; renderReviewStep(); });
+
+  if (reviewStep === 2) {
+    document.querySelectorAll(".dump-to-task").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const wrap = e.target.closest("[data-dump-id]");
+        const dumpId = wrap.dataset.dumpId;
+        const item = STATE.brainDump.find(b => b.id === dumpId);
+        if (!item) return;
+        createTask({ title: item.text, kind: "task", priority: 3 });
+        item.processed = true;
+        saveState();
+        renderReviewStep();
+      });
+    });
+    document.querySelectorAll(".dump-dismiss").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const wrap = e.target.closest("[data-dump-id]");
+        const item = STATE.brainDump.find(b => b.id === wrap.dataset.dumpId);
+        if (!item) return;
+        item.processed = true;
+        saveState();
+        renderReviewStep();
+      });
+    });
+    const addBtn = document.getElementById("rv-new-item-add");
+    if (addBtn) addBtn.addEventListener("click", () => {
+      const input = document.getElementById("rv-new-item");
+      const val = input.value.trim();
+      if (!val) return;
+      createTask({ title: val, kind: "quote", priority: 3 });
+      input.value = "";
+      renderReviewStep();
+    });
+  }
+
+  if (reviewStep === 3) {
+    document.querySelectorAll(".rv-slider").forEach(slider => {
+      slider.addEventListener("input", (e) => {
+        const wrap = e.target.closest("[data-priority-id]");
+        const id = wrap.dataset.priorityId;
+        const val = Number(e.target.value);
+        updateTask(id, { priority: val });
+        const band = priorityBand(val);
+        const label = wrap.querySelector(".rv-band");
+        label.textContent = band.label;
+        label.style.color = band.color;
+      });
+    });
+  }
+
+  document.getElementById("rv-next").addEventListener("click", () => {
+    if (reviewStep === 1) {
+      document.querySelectorAll("[data-review-done]").forEach(cb => {
+        if (cb.checked) updateTask(cb.dataset.reviewDone, { status: "done", completedAt: new Date().toISOString() });
+      });
+      // anything still active/waiting simply carries forward — stamp today's date
+      STATE.tasks.forEach(t => {
+        if (t.status !== "done" && t.dateKey < todayKey()) { t.dateKey = todayKey(); t.carriedOver = true; }
+      });
+      saveState();
+      reviewStep = 2;
+      renderReviewStep();
+    } else if (reviewStep === 2) {
+      reviewStep = 3;
+      renderReviewStep();
+    } else {
+      STATE.settings.lastReviewDate = todayKey();
+      saveState();
+      closeModal();
+      render();
+      toast("Review complete. Today's list is sorted.", "success");
+    }
+  });
+}
+
+/* =========================================================================
+   EVENT BINDING (main app)
+   ========================================================================= */
+function bindApp() {
+  tickClock();
+
+  document.getElementById("btn-settings").addEventListener("click", openSettingsModal);
+  document.getElementById("btn-pdf").addEventListener("click", exportPDF);
+  document.getElementById("btn-review").addEventListener("click", openReviewWizard);
+  document.getElementById("btn-add-task").addEventListener("click", () => openTaskModal(null));
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeTab = btn.dataset.tab;
+      render();
+    });
+  });
+
+  const dumpInput = document.getElementById("quick-dump-input");
+  const micBtn = document.getElementById("btn-mic");
+  micBtn.addEventListener("click", () => toggleMic(dumpInput, micBtn));
+  document.getElementById("btn-dump-save").addEventListener("click", () => {
+    addBrainDump(dumpInput.value);
+    dumpInput.value = "";
+    render();
+  });
+  dumpInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      addBrainDump(dumpInput.value);
+      dumpInput.value = "";
+      render();
+    }
+  });
+
+  document.querySelectorAll(".task-card").forEach(card => {
+    const id = card.dataset.id;
+    const doneBtn = card.querySelector(".btn-toggle-done");
+    if (doneBtn) doneBtn.addEventListener("click", () => toggleDone(id));
+    const bookBtn = card.querySelector(".btn-book");
+    if (bookBtn) bookBtn.addEventListener("click", () => openBookModal(id));
+    const waitBtn = card.querySelector(".btn-waiting");
+    if (waitBtn) waitBtn.addEventListener("click", () => {
+      const t = STATE.tasks.find(x => x.id === id);
+      if (t.status === "waiting") toggleWaiting(id);
+      else openWaitingModal(id);
+    });
+    const editBtn = card.querySelector(".btn-edit");
+    if (editBtn) editBtn.addEventListener("click", () => openTaskModal(id));
+    const delBtn = card.querySelector(".btn-delete");
+    if (delBtn) delBtn.addEventListener("click", () => {
+      if (confirm("Delete this item?")) { deleteTask(id); render(); toast("Deleted.", "success"); }
+    });
+  });
+
+  enableCardDragReorder();
+}
+
+function enableCardDragReorder() {
+  const container = document.getElementById("task-list");
+  if (!container) return;
+  let dragging = null;
+  let pointerId = null;
+
+  container.querySelectorAll(".drag-handle-btn").forEach(handle => {
+    handle.addEventListener("pointerdown", (e) => {
+      const card = handle.closest(".task-card");
+      if (!card) return;
+      dragging = card;
+      pointerId = e.pointerId;
+      handle.setPointerCapture(pointerId);
+      card.classList.add("dragging");
+      e.preventDefault();
+    });
+
+    handle.addEventListener("pointermove", (e) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      e.preventDefault();
+      const siblings = Array.from(container.querySelectorAll(".task-card")).filter(c => c !== dragging);
+      const y = e.clientY;
+      let target = null;
+      let before = true;
+      for (const sib of siblings) {
+        const rect = sib.getBoundingClientRect();
+        const mid = rect.top + rect.height / 2;
+        if (y < mid) { target = sib; before = true; break; }
+        target = sib; before = false;
+      }
+      if (target) {
+        if (before) container.insertBefore(dragging, target);
+        else container.insertBefore(dragging, target.nextSibling);
+      }
+    });
+
+    const endDrag = (e) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      dragging.classList.remove("dragging");
+      try { handle.releasePointerCapture(pointerId); } catch (err) { /* already released */ }
+      Array.from(container.querySelectorAll(".task-card")).forEach((c, i) => {
+        const t = STATE.tasks.find(x => x.id === c.dataset.id);
+        if (t) t.order = i * 10;
+      });
+      saveState();
+      dragging = null;
+      pointerId = null;
+      render();
+    };
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("pointercancel", endDrag);
+  });
+}
+
+/* =========================================================================
+   BOOT
+   ========================================================================= */
+render();
+startChimeWatcher();
+registerServiceWorker();
+</script>
+</body>
+</html>

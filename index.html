@@ -254,6 +254,40 @@ function saveState() {
   }
 }
 
+function itemTimestamp(item) {
+  const candidates = [item && item.updatedAt, item && item.completedAt, item && item.createdAt].filter(Boolean);
+  let best = 0;
+  candidates.forEach(value => {
+    const time = Date.parse(value);
+    if (Number.isFinite(time) && time > best) best = time;
+  });
+  return best;
+}
+
+function mergeItems(localItems, cloudItems) {
+  const merged = new Map();
+  (cloudItems || []).forEach(item => {
+    if (item && item.id) merged.set(item.id, item);
+  });
+  (localItems || []).forEach(item => {
+    if (!item || !item.id) return;
+    const existing = merged.get(item.id);
+    if (!existing || itemTimestamp(item) > itemTimestamp(existing)) merged.set(item.id, item);
+  });
+  return Array.from(merged.values());
+}
+
+function mergeStates(local, cloud) {
+  const base = defaultState();
+  const localState = normalizeState(local || base);
+  const cloudState = normalizeState(cloud || base);
+  return {
+    tasks: mergeItems(localState.tasks, cloudState.tasks),
+    brainDump: mergeItems(localState.brainDump, cloudState.brainDump),
+    settings: Object.assign({}, base.settings, cloudState.settings || {}, localState.settings || {})
+  };
+}
+
 async function initialiseCloudSync() {
   try {
     const localRaw = localStorage.getItem(STORAGE_KEY);
@@ -263,9 +297,14 @@ async function initialiseCloudSync() {
     const payload = await res.json();
 
     if (payload && payload.state) {
-      STATE = normalizeState(payload.state);
+      // Never replace a device's local list wholesale. Merge both copies first,
+      // save the merged copy locally, then publish it back to cloud.
+      STATE = mergeStates(local, payload.state);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
       render();
+      syncReady = true;
+      await pushCloudState();
+      return;
     } else if (localRaw) {
       STATE = local;
       syncReady = true;
@@ -348,6 +387,7 @@ function createTask(data) {
     createdAt: new Date().toISOString(),
     dateKey: todayKey(),
     completedAt: null,
+    updatedAt: new Date().toISOString(),
     carriedOver: false
   };
   STATE.tasks.unshift(task);
@@ -359,6 +399,7 @@ function updateTask(id, patch) {
   const t = STATE.tasks.find(t => t.id === id);
   if (!t) return;
   Object.assign(t, patch);
+  t.updatedAt = new Date().toISOString();
   saveState();
 }
 

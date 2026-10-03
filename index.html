@@ -61,5 +61,5 @@ const oldDraw=draw;draw=function(){oldDraw();if(!pins.length)return;x.save();x.t
 const oldMouseDown=c.onmousedown;c.onmousedown=e=>{if(pinMode&&photo.img&&photo.box){let p=world(e),b=photo.box;if(p.x>=b.x&&p.x<=b.x+b.w&&p.y>=b.y&&p.y<=b.y+b.h){pins.push({x:p.x,y:p.y,face:$('#pinFace').value});draw();draw3d();return}}oldMouseDown(e)};
 $('#pinPhoto').onclick=()=>{if(!photo.img){alert('Upload a site photo first.');return}pinMode=!pinMode;$('#pinPhoto').classList.toggle('active',pinMode);$('#pinPhoto').textContent=pinMode?'Tap photo to add pins':'Pin photo points'};
 const originalPayload=payload;payload=function(){let p=originalPayload();p.pins=pins;p.room=room();return p};requestAnimationFrame(()=>{resize();draw()});setTimeout(()=>{resize();draw()},500);
-
+</script>
 <script>if(matchMedia('(max-width:760px)').matches){const a=$('#toolPanel'),b=$('#mobileTools');b.style.display='block';b.onclick=e=>{e.preventDefault();e.stopPropagation();a.classList.toggle('open');b.textContent=a.classList.contains('open')?'Close tools':'Open tools';setTimeout(()=>{resize();draw()},220)};a.addEventListener('click',e=>{if(e.target===a&&a.classList.contains('open'))a.classList.remove('open')})}</script></body></html>

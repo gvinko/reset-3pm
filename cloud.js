@@ -36,6 +36,7 @@ async function apply(dr){
     if(dr.scale){window.CADTakeoff?.ensureScaleOption(dr.scale);$('#scale').value=String(dr.scale)}
     if(dr.room){for(const [k,id] of [['w','roomW'],['d','roomD'],['h','roomH']])if(dr.room[k]&&$('#'+id))$('#'+id).value=dr.room[k]}
     window.CADPhoto3D?.setTrace(dr.roomTrace||null);
+    window.CADFittings?.setSketch(dr.sketch3d||null);window.CADFittings?.setPlan(dr.roomPlan||null);
     selected=null;selectedFields(null);tally();
     if(dr.photoBox)await loadPhoto(dr.photoBox).catch(()=>{});
     queueSave();

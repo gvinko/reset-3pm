@@ -84,4 +84,5 @@ const originalPayload=payload;payload=function(){let p=originalPayload();p.pins=
 </script>
 <script src="takeoff.js"></script>
 <script src="photo3d.js"></script>
+<script src="cloud.js"></script>
 <script>if(matchMedia('(max-width:760px)').matches){const a=$('#toolPanel'),b=$('#mobileTools');b.style.display='block';b.onclick=e=>{e.preventDefault();e.stopPropagation();a.classList.toggle('open');b.textContent=a.classList.contains('open')?'Close tools':'Open tools';setTimeout(()=>{resize();draw()},220)};a.addEventListener('click',e=>{if(e.target===a&&a.classList.contains('open'))a.classList.remove('open')})}</script></body></html>

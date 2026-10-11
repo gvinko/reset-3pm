@@ -140,6 +140,6 @@ ${cut.length?`<h2>Cut list</h2><table><tr><th>Piece</th><th>Qty</th><th>W × L (
   w.document.close();
 };
 
-window.CADTakeoff={takeoff,SYMBOLS,FLEX_SIZES};
+window.CADTakeoff={takeoff,SYMBOLS,FLEX_SIZES,ensureScaleOption};
 tally();
 })();

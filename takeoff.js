@@ -24,7 +24,7 @@ let toolKind='';
 const tools=$('#tools');
 tools.insertAdjacentHTML('beforeend','<button data-tool="line" data-kind="flex">Flex duct run</button><button data-tool="rect" data-kind="symbol">HVAC symbol</button>');
 const options=document.createElement('div');options.className='fields';options.style.marginTop='8px';options.id='hvacOptions';
-options.innerHTML='<div><label>Flex diameter</label><select id="flexSize">'+FLEX_SIZES.map(s=>`<option value="${s}" ${s===350?'selected':''}>Ø${s} flex</option>`).join('')+'</select></div><div><label>Symbol</label><select id="symbolType">'+Object.entries(SYMBOLS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')+'</select></div>';
+options.innerHTML='<div><label for="flexSize">Flex diameter</label><select id="flexSize">'+FLEX_SIZES.map(s=>`<option value="${s}" ${s===350?'selected':''}>Ø${s} flex</option>`).join('')+'</select></div><div><label for="symbolType">Symbol</label><select id="symbolType">'+Object.entries(SYMBOLS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')+'</select></div>';
 $('#polyActions').after(options);
 tools.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;toolKind=b.dataset.kind||''},true);
 

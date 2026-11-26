@@ -142,8 +142,8 @@ function drawTransition(){
 // ---- 3D sketch tab ----
 const sk={plane:'floor',height:0,grid:50};
 function sketchControls(){
-  controls.innerHTML=`<div class="fields"><div><label>Draw on</label><select id="skPlane"><option value="floor">Floor / ceiling plane (flat)</option><option value="front">Front wall plane</option><option value="side">Side wall plane</option></select></div>
-  <div><label id="skHLabel">Height (mm)</label><input id="skHeight" type="number" step="50" value="${sk.height}"></div><div><label>Snap (mm)</label><select id="skSnap"><option>10</option><option selected>50</option><option>100</option></select></div></div>
+  controls.innerHTML=`<div class="fields"><div><label for="skPlane">Draw on</label><select id="skPlane"><option value="floor">Floor / ceiling plane (flat)</option><option value="front">Front wall plane</option><option value="side">Side wall plane</option></select></div>
+  <div><label for="skHeight" id="skHLabel">Height (mm)</label><input id="skHeight" type="number" step="50" value="${sk.height}"></div><div><label for="skSnap">Snap (mm)</label><select id="skSnap"><option>10</option><option selected>50</option><option>100</option></select></div></div>
   <div class="grid" style="margin-top:8px"><button id="skBreak">New line (lift pen)</button><button id="skUndo">Undo point</button><button id="skClear" class="danger">Clear sketch</button></div>
   <div class="note">Tap to place a point; each tap joins to the last one. Tap an existing point to join to it. Drag to turn the view. Change the plane or height to draw up walls or across ceilings.</div>`;
   const plane=controls.querySelector('#skPlane');plane.value=sk.plane;

@@ -1,0 +1,57 @@
+{
+  "desktop": {
+    "runs": 1,
+    "scores": {
+      "performance": 100,
+      "accessibility": 93,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": "0.2 s",
+      "largest-contentful-paint": "0.3 s",
+      "total-blocking-time": "0 ms",
+      "cumulative-layout-shift": "0.019",
+      "speed-index": "0.2 s"
+    },
+    "failing": {
+      "performance": [],
+      "accessibility": [
+        {
+          "id": "select-name",
+          "weight": 7,
+          "score": 0,
+          "display": ""
+        }
+      ],
+      "best-practices": [],
+      "seo": []
+    },
+    "finalUrl": "http://localhost:4173/",
+    "runtimeError": null
+  },
+  "mobile": {
+    "runs": 3,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": "0.6 s",
+      "largest-contentful-paint": "1.2 s",
+      "total-blocking-time": "0 ms",
+      "cumulative-layout-shift": "0",
+      "speed-index": "0.6 s"
+    },
+    "failing": {
+      "performance": [],
+      "accessibility": [],
+      "best-practices": [],
+      "seo": []
+    },
+    "finalUrl": "http://localhost:4173/",
+    "runtimeError": null
+  }
+}

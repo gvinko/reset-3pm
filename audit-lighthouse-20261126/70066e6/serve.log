@@ -1,0 +1,213 @@
+ INFO  Accepting connections at http://localhost:4173
+ HTTP  11/26/2026 12:59:18 AM ::1 GET /
+ HTTP  11/26/2026 12:59:18 AM ::1 Returned 200 in 20 ms
+ HTTP  11/26/2026 12:59:18 AM ::1 GET /
+ HTTP  11/26/2026 12:59:18 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 3 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 3 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 3 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /sw.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /index.html
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /index
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /icon-192.png
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /apple-touch-icon.png
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 200 in 3 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 12:59:37 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:37 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:40 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:40 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:40 AM ::1 GET /robots.txt
+ HTTP  11/26/2026 12:59:40 AM ::1 Returned 404 in 1 ms
+ HTTP  11/26/2026 12:59:40 AM ::1 GET /sw.js
+ HTTP  11/26/2026 12:59:40 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:42 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:42 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /sw.js
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /index.html
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 301 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 2 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /index
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /icon-192.png
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /apple-touch-icon.png
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:49 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 12:59:49 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:52 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 12:59:52 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 12:59:52 AM ::1 GET /robots.txt
+ HTTP  11/26/2026 12:59:52 AM ::1 Returned 404 in 1 ms
+ HTTP  11/26/2026 12:59:52 AM ::1 GET /sw.js
+ HTTP  11/26/2026 12:59:52 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 12:59:53 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 12:59:53 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 0 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /sw.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /index.html
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /index
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /icon-192.png
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /apple-touch-icon.png
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 2 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:01 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 1:00:01 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:03 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:03 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:03 AM ::1 GET /robots.txt
+ HTTP  11/26/2026 1:00:03 AM ::1 Returned 404 in 0 ms
+ HTTP  11/26/2026 1:00:03 AM ::1 GET /sw.js
+ HTTP  11/26/2026 1:00:03 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:05 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:05 AM ::1 Returned 304 in 3 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 2 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 2 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /sw.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /index.html
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /index
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 301 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /icon-192.png
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /apple-touch-icon.png
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 200 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /takeoff.js
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /photo3d.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /fitting3d.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:12 AM ::1 GET /cloud.js
+ HTTP  11/26/2026 1:00:12 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:15 AM ::1 GET /manifest.webmanifest
+ HTTP  11/26/2026 1:00:15 AM ::1 Returned 304 in 1 ms
+ HTTP  11/26/2026 1:00:15 AM ::1 GET /robots.txt
+ HTTP  11/26/2026 1:00:15 AM ::1 Returned 404 in 1 ms
+ HTTP  11/26/2026 1:00:15 AM ::1 GET /sw.js
+ HTTP  11/26/2026 1:00:15 AM ::1 Returned 304 in 0 ms
+ HTTP  11/26/2026 1:00:17 AM ::1 GET /icon.svg
+ HTTP  11/26/2026 1:00:17 AM ::1 Returned 304 in 1 ms
